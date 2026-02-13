@@ -66,6 +66,11 @@ input, select, button {
 }
 button { cursor: pointer; background: #184ea7; border-color: #2f68c4; }
 button:hover { background: #1c5dc7; }
+.secondary {
+  background: #172546;
+  border-color: #334b86;
+}
+.secondary:hover { background: #203460; }
 
 .summary {
   margin-top: 1rem;

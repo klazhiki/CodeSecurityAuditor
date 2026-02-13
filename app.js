@@ -52,6 +52,7 @@ const state = {
 };
 
 const scanBtn = document.getElementById("scanBtn");
+const exportSarifBtn = document.getElementById("exportSarifBtn");
 const findingsList = document.getElementById("findingsList");
 const details = document.getElementById("issueDetails");
 const summary = document.getElementById("summary");
@@ -59,6 +60,89 @@ const severityFilter = document.getElementById("severityFilter");
 
 function prettyPercent(value) {
   return `${Math.round(value * 100)}%`;
+}
+
+function severityToSarifLevel(severity) {
+  if (severity === "critical" || severity === "high") return "error";
+  if (severity === "medium") return "warning";
+  return "note";
+}
+
+function parseLocation(rawLocation) {
+  const [uri, line] = rawLocation.split(":");
+  return { uri, line: Number(line) || 1 };
+}
+
+function buildSarifReport(findings) {
+  const results = findings.map((finding) => {
+    const { uri, line } = parseLocation(finding.file);
+    return {
+      ruleId: `AEGIS-${finding.id}`,
+      level: severityToSarifLevel(finding.severity),
+      message: {
+        text: `${finding.title}. Attack path: ${finding.attackPath}`
+      },
+      locations: [
+        {
+          physicalLocation: {
+            artifactLocation: { uri },
+            region: { startLine: line }
+          }
+        }
+      ],
+      properties: {
+        severity: finding.severity,
+        confidence: finding.confidence,
+        verification: finding.verification.map((v) => `${v.status}: ${v.text}`)
+      }
+    };
+  });
+
+  return {
+    version: "2.1.0",
+    $schema: "https://json.schemastore.org/sarif-2.1.0.json",
+    runs: [
+      {
+        tool: {
+          driver: {
+            name: "Aegis Frontend Demo",
+            informationUri: "https://example.com/aegis",
+            version: "0.1.0",
+            rules: findings.map((finding) => ({
+              id: `AEGIS-${finding.id}`,
+              name: finding.title,
+              shortDescription: { text: finding.title },
+              fullDescription: { text: finding.attackPath },
+              properties: {
+                precision: "high",
+                securitySeverity: finding.severity
+              }
+            }))
+          }
+        },
+        results
+      }
+    ]
+  };
+}
+
+function downloadSarif() {
+  if (!state.findings.length) {
+    summary.textContent = "Run a scan first to export SARIF.";
+    return;
+  }
+
+  const report = buildSarifReport(state.findings);
+  const json = JSON.stringify(report, null, 2);
+  const blob = new Blob([json], { type: "application/sarif+json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "aegis-report.sarif";
+  a.click();
+  URL.revokeObjectURL(url);
+
+  summary.innerHTML = `${summary.innerHTML}<br><strong>SARIF exported:</strong> aegis-report.sarif`;
 }
 
 function renderSummary() {
@@ -146,6 +230,8 @@ scanBtn.addEventListener("click", () => {
     renderDetails();
   }, 500);
 });
+
+exportSarifBtn.addEventListener("click", downloadSarif);
 
 severityFilter.addEventListener("change", (e) => {
   state.filter = e.target.value;
