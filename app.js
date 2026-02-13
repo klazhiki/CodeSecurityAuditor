@@ -72,8 +72,9 @@ function severityToSarifLevel(severity) {
 }
 
 function parseLocation(rawLocation) {
-  const [uri, line] = rawLocation.split(":");
-  return { uri, line: Number(line) || 1 };
+  const match = /^(.*):(\d+)$/.exec(rawLocation);
+  if (!match) return { uri: rawLocation, line: 1 };
+  return { uri: match[1], line: Number(match[2]) || 1 };
 }
 
 function buildSarifReport(findings) {
@@ -241,7 +242,7 @@ function renderDetails() {
   node.querySelector(".exploit-sketch").textContent = buildExploitSketch(finding);
   node.querySelector(".patch").textContent = finding.patch;
 
-  const graphContainer = node.querySelector("#attackGraph");
+  const graphContainer = node.querySelector(".attack-graph-canvas");
   renderAttackGraph(graphContainer, finding.graph);
 
   const verificationList = node.querySelector(".verification");
