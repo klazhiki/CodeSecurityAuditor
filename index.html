@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aegis Security Auditor</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Aegis</h1>
+        <p>AI Code Security Auditor · Graph + Patch + Proof</p>
+      </div>
+      <div class="topbar-right">
+        <span class="badge">MVP Frontend</span>
+        <span class="author-credit">Built by Ethan Joseph</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel controls">
+        <h2>Scan Controls</h2>
+        <label>
+          Repository
+          <input id="repoInput" type="text" value="./sample-repo" />
+        </label>
+        <label>
+          Languages
+          <select id="langInput">
+            <option value="py-ts">Python + TypeScript</option>
+            <option value="py">Python</option>
+            <option value="ts">TypeScript</option>
+          </select>
+        </label>
+        <button id="scanBtn">Run Scan</button>
+        <button id="exportSarifBtn" class="secondary">Export SARIF</button>
+
+        <div class="summary" id="summary"></div>
+      </section>
+
+      <section class="panel findings">
+        <div class="findings-header">
+          <h2>Findings</h2>
+          <select id="severityFilter">
+            <option value="all">All Severities</option>
+            <option value="critical">Critical</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <ul id="findingsList" class="finding-list"></ul>
+      </section>
+
+      <section class="panel details">
+        <h2>Issue Details</h2>
+        <div id="issueDetails" class="issue-empty">Select a finding to inspect attack path, patch, and proof.</div>
+      </section>
+    </main>
+
+    <template id="detailTemplate">
+      <article>
+        <h3></h3>
+        <p class="meta"></p>
+        <h4>Attack Path</h4>
+        <p class="attack-path"></p>
+        <h4>Attack Surface Graph</h4>
+        <div class="attack-graph" id="attackGraph"></div>
+        <h4>Patch Diff</h4>
+        <pre class="patch"></pre>
+        <h4>Verification</h4>
+        <ul class="verification"></ul>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
