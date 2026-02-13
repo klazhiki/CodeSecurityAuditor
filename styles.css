@@ -120,6 +120,15 @@ button:hover { background: #1c5dc7; }
 
 .issue-empty { color: var(--muted); }
 .meta { color: var(--muted); }
+
+.exploit-sketch {
+  color: #c9d8ff;
+  background: #111a37;
+  border: 1px solid #2f467f;
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+}
+
 .patch {
   overflow-x: auto;
   background: #0e1430;

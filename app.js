@@ -109,7 +109,7 @@ function buildSarifReport(findings) {
         tool: {
           driver: {
             name: "Aegis Frontend Demo",
-            version: "0.2.0",
+            version: "0.3.0",
             rules: findings.map((finding) => ({
               id: `AEGIS-${finding.id}`,
               name: finding.title,
@@ -141,6 +141,11 @@ function downloadSarif() {
   URL.revokeObjectURL(url);
 
   summary.innerHTML = `${summary.innerHTML}<br><strong>SARIF exported:</strong> aegis-report.sarif`;
+}
+
+function buildExploitSketch(finding) {
+  const nodes = finding.graph || ["entrypoint", "application flow", "security-sensitive sink"];
+  return `Attacker controls ${nodes[0]}, which reaches ${nodes[1]}, and then influences ${nodes[2]}. Impact depends on runtime guardrails; this is a safe simulation sketch only.`;
 }
 
 function renderAttackGraph(container, nodes) {
@@ -233,6 +238,7 @@ function renderDetails() {
   node.querySelector("h3").textContent = `#${finding.id} · ${finding.title}`;
   node.querySelector(".meta").textContent = `Severity: ${finding.severity.toUpperCase()} · Confidence: ${prettyPercent(finding.confidence)} · Location: ${finding.file}`;
   node.querySelector(".attack-path").textContent = finding.attackPath;
+  node.querySelector(".exploit-sketch").textContent = buildExploitSketch(finding);
   node.querySelector(".patch").textContent = finding.patch;
 
   const graphContainer = node.querySelector("#attackGraph");
