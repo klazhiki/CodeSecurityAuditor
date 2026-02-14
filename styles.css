@@ -30,13 +30,6 @@ body {
 h1 { margin: 0; }
 .topbar p { margin: 0.35rem 0 0; color: var(--muted); }
 
-.topbar-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.45rem;
-}
-
 .badge {
   background: #20315e;
   color: #bbd1ff;
@@ -44,11 +37,6 @@ h1 { margin: 0; }
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
   font-size: 0.85rem;
-}
-
-.author-credit {
-  font-size: 0.8rem;
-  color: #9cb4e8;
 }
 
 .layout {
@@ -120,15 +108,6 @@ button:hover { background: #1c5dc7; }
 
 .issue-empty { color: var(--muted); }
 .meta { color: var(--muted); }
-
-.exploit-sketch {
-  color: #c9d8ff;
-  background: #111a37;
-  border: 1px solid #2f467f;
-  border-radius: 8px;
-  padding: 0.65rem 0.75rem;
-}
-
 .patch {
   overflow-x: auto;
   background: #0e1430;
@@ -141,35 +120,7 @@ button:hover { background: #1c5dc7; }
 .verification li.warn { color: var(--warn); }
 .verification li.fail { color: var(--bad); }
 
-.attack-graph {
-  border: 1px solid #2b3f73;
-  border-radius: 10px;
-  padding: 0.5rem;
-  background: #0d1430;
-  margin-bottom: 0.8rem;
-}
-.attack-graph svg {
-  width: 100%;
-  height: 140px;
-}
-.node {
-  fill: #1d2d57;
-  stroke: #4b6eb8;
-  stroke-width: 1;
-}
-.node-label {
-  fill: #dde7ff;
-  font-size: 11px;
-  font-family: Inter, system-ui, sans-serif;
-}
-.edge {
-  stroke: #6f8ed1;
-  stroke-width: 1.5;
-  marker-end: url(#arrowhead);
-}
-
 @media (max-width: 1100px) {
   .layout { grid-template-columns: 1fr; }
   .panel { min-height: auto; }
-  .topbar-right { align-items: flex-start; }
 }

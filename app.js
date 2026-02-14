@@ -75,6 +75,8 @@ function parseLocation(rawLocation) {
   const match = /^(.*):(\d+)$/.exec(rawLocation);
   if (!match) return { uri: rawLocation, line: 1 };
   return { uri: match[1], line: Number(match[2]) || 1 };
+  const [uri, line] = rawLocation.split(":");
+  return { uri, line: Number(line) || 1 };
 }
 
 function buildSarifReport(findings) {
@@ -111,11 +113,18 @@ function buildSarifReport(findings) {
           driver: {
             name: "Aegis Frontend Demo",
             version: "0.3.0",
+            informationUri: "https://example.com/aegis",
+            version: "0.1.0",
             rules: findings.map((finding) => ({
               id: `AEGIS-${finding.id}`,
               name: finding.title,
               shortDescription: { text: finding.title },
               fullDescription: { text: finding.attackPath }
+              fullDescription: { text: finding.attackPath },
+              properties: {
+                precision: "high",
+                securitySeverity: finding.severity
+              }
             }))
           }
         },
@@ -244,6 +253,8 @@ function renderDetails() {
 
   const graphContainer = node.querySelector(".attack-graph-canvas");
   renderAttackGraph(graphContainer, finding.graph);
+
+  node.querySelector(".patch").textContent = finding.patch;
 
   const verificationList = node.querySelector(".verification");
   finding.verification.forEach((item) => {
