@@ -6,7 +6,6 @@ Simple static frontend prototype for **Aegis — AI Code Security Auditor**.
 
 - Scan controls (repo path + language target)
 - Simulated scan run
-- Demo mode note in scan controls for clarity.
 - Findings list with severity filter
 - SARIF export button (`aegis-report.sarif`) after scan
 - Attack Surface Graph preview (entrypoint → propagation → sink) in issue details
