@@ -24,3 +24,7 @@ python3 -m http.server 4173
 ```
 
 Then open `http://localhost:4173`.
+
+## Example branch workflow
+
+This commit is an intentionally small example change made on a non-main branch (`demo/github-button-example`) so it can be pushed/merged later via your GitHub UI button flow.
